@@ -33,7 +33,21 @@ A sessão fica salva na pasta de dados do Node-RED e sobrevive a reinícios. O b
 
 ## Usar o nó WhatsApp
 
-Escolha a **Conta** e o **Tipo**.
+| Campo | O que faz |
+|---|---|
+| Nome | só um rótulo para você reconhecer o nó no fluxo (opcional) |
+| Conta | a conta WhatsApp vinculada acima |
+| Tipo | define o papel do nó: **Recebimento** (só saída) ou **Envio** (só entrada) |
+| Saídas por número ou grupo | só no Recebimento. Lista de números (com código do país, só dígitos, ex.: `5511999998888`) ou ids de grupo (terminam em `@g.us`). Cada item cria uma saída extra no nó, que recebe também as mensagens dele; a saída 1 continua recebendo tudo |
+| Número | só no Envio. Destino fixo do envio. **Vazio** = o destino vem no `msg.payload` |
+
+Na conta (nó de configuração):
+
+| Campo | O que faz |
+|---|---|
+| Nome | rótulo da conta |
+| Conectar / Gerar QR | mostra o QR para vincular o celular |
+| Desvincular | remove o aparelho do WhatsApp e apaga a sessão salva |
 
 ### Tipo: Recebimento (só saída)
 
