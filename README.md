@@ -51,11 +51,21 @@ Na conta (nó de configuração):
 
 ### Tipo: Recebimento (só saída)
 
-Emite uma mensagem para cada texto recebido:
+Emite uma mensagem para cada mensagem recebida (conversas individuais e grupos):
 
 ```
 msg.payload = { numero, mensagem, nome, grupo, tipo }
 ```
+
+| Campo | Conteúdo |
+|---|---|
+| `numero` | número de quem escreveu, só dígitos, com código do país |
+| `mensagem` | o texto (vazio se for mídia sem legenda) |
+| `nome` | nome que a pessoa usa no WhatsApp |
+| `grupo` | o id do grupo (termina em `@g.us`) se veio de um grupo; senão `null` |
+| `tipo` | `texto`, `imagem`, `video`, `audio`, `documento`, `figurinha`, `localizacao` ou `contato` |
+
+Imagens, vídeos, áudios e outros arquivos chegam só como aviso (com a legenda, se houver): o arquivo em si não é baixado. Status e listas de transmissão são ignorados. Mensagens que você mesmo envia em outras conversas pelo celular não aparecem; só a conversa com o seu próprio número é entregue.
 
 A lista **Saídas por número** cria saídas extras: a saída 1 recebe tudo; cada número (ou id de grupo, terminado em `@g.us`) adicionado cria uma saída que recebe também as mensagens dele. O que você escreve na conversa com o seu próprio número também é entregue.
 
@@ -66,7 +76,7 @@ msg.payload = { numero: "5511999999999", mensagem: "Olá" }
 msg.payload = { grupo: "<id do grupo>@g.us", mensagem: "Olá" }
 ```
 
-Só texto. Com o campo **Número fixo** preenchido, `msg.payload` pode ser só o texto, ou `{ mensagem }`.
+Só texto. Ligar a saída do Recebimento na entrada do Envio responde a quem escreveu (ou ao grupo). Com o campo **Número** preenchido, o destino é fixo e `msg.payload` pode ser só o texto, ou `{ mensagem }`. Mensagens recusadas (sem contato recente, texto repetido, fila cheia) aparecem como aviso no log e na etiqueta do nó.
 
 ## Regras fixas de envio
 
@@ -74,7 +84,7 @@ Não têm campo de configuração, para proteger o número:
 
 - intervalo aleatório de 5 a 15 s entre mensagens, com pausa longa ocasional (30 a 90 s);
 - no máximo 4 por minuto, 60 por hora e 200 por dia; o excedente espera numa fila de 50;
-- só envia para quem escreveu nos últimos 30 dias (exceto o seu próprio número);
+- só envia para quem (pessoa ou grupo) escreveu nos últimos 30 dias, exceto o seu próprio número;
 - marca a conversa como lida e mostra "digitando" proporcional ao texto;
 - o mesmo texto não vai para mais de 2 números em 10 minutos;
 - texto de até 4000 caracteres.
