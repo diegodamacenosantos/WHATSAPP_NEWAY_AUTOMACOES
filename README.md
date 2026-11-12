@@ -39,7 +39,7 @@ A sessão fica salva na pasta de dados do Node-RED e sobrevive a reinícios. O b
 | Conta | a conta WhatsApp vinculada acima |
 | Tipo | define o papel do nó: **Recebimento** (só saída) ou **Envio** (só entrada) |
 | Saídas por número ou grupo | só no Recebimento. Lista de números (com código do país, só dígitos, ex.: `5511999998888`) ou ids de grupo (terminam em `@g.us`). Cada item cria uma saída extra no nó, que recebe também as mensagens dele; a saída 1 continua recebendo tudo |
-| Número | só no Envio. Destino fixo do envio. **Vazio** = o destino vem no `msg.payload` |
+| Número | só no Envio. Destino fixo do envio: um número (só dígitos, com código do país) ou o id de um grupo (termina em `@g.us`). **Vazio** = o destino vem no `msg.payload` |
 
 Na conta (nó de configuração):
 
@@ -71,12 +71,27 @@ A lista **Saídas por número** cria saídas extras: a saída 1 recebe tudo; cad
 
 ### Tipo: Envio (só entrada, sem saída)
 
+Com o campo **Número** vazio, o destino vem no `msg.payload`, que aceita número ou id de grupo:
+
 ```
 msg.payload = { numero: "5511999999999", mensagem: "Olá" }
+msg.payload = { numero: "<id do grupo>@g.us", mensagem: "Olá" }
 msg.payload = { grupo: "<id do grupo>@g.us", mensagem: "Olá" }
 ```
 
-Só texto. Ligar a saída do Recebimento na entrada do Envio responde a quem escreveu (ou ao grupo). Com o campo **Número** preenchido, o destino é fixo e `msg.payload` pode ser só o texto, ou `{ mensagem }`. Mensagens recusadas (sem contato recente, texto repetido, fila cheia) aparecem como aviso no log e na etiqueta do nó.
+Com o campo **Número** preenchido (número ou id de grupo), o destino é fixo e `msg.payload` pode ser só o texto, ou `{ mensagem }`:
+
+```
+msg.payload = "Olá"
+```
+
+Só texto. Ligar a saída do Recebimento na entrada do Envio responde a quem escreveu (ou ao grupo). Mensagens recusadas (sem contato recente, texto repetido, fila cheia) aparecem como aviso no log e na etiqueta do nó.
+
+## Grupos
+
+O envio para grupo segue a mesma proteção das pessoas: o grupo só é liberado depois que **outra pessoa escreve nele** enquanto o nó está online, e fica liberado por 30 dias. O que você mesmo escreve no grupo pelo celular não conta, e o histórico anterior à conexão também não. Um grupo recém-criado, em que ninguém escreveu com o nó online, é recusado com a mensagem de que não escreveu nos últimos 30 dias.
+
+Para descobrir o id de um grupo: ligue um nó **WhatsApp** em Recebimento a um nó debug, peça a alguém para escrever no grupo e leia `msg.payload.grupo` (termina em `@g.us`). Use esse id no campo **Número** do Envio ou no `msg.payload`.
 
 ## Regras fixas de envio
 
@@ -99,6 +114,7 @@ Queda comum: tenta de novo com espera crescente (5 s até 5 min). Se o vínculo 
 |---|---|
 | QR não aparece | fazer o Deploy antes e clicar em **Conectar / Gerar QR** |
 | Mensagem não sai | conferir se o contato escreveu nos últimos 30 dias e se há fila |
+| Grupo recusado ("não escreveu para você nos últimos 30 dias") | alguém precisa escrever no grupo com o nó online; confirmar que o id termina em `@g.us` e foi colocado no campo **Número** ou em `msg.payload` |
 | Editor mostra o nó como era antes da atualização | reiniciar o Node-RED |
 
 ## Atualizar
