@@ -25,11 +25,11 @@ A conta WhatsApp (login e conexão) é um nó de configuração: é criada de de
 ## Conta (feita uma vez)
 
 1. Arraste um nó **WhatsApp** para o fluxo, dê duplo clique e crie uma conta (lápis).
-2. Faça o **Deploy**.
-3. Abra a conta de novo e clique em **Conectar / Gerar QR**.
-4. No celular: WhatsApp, **Aparelhos conectados**, **Conectar um aparelho**, e escaneie o QR.
+2. O QR já aparece na tela da conta, sem precisar de Deploy, e se renova sozinho quando expira. Se deixar o nome em branco, a conta recebe o nome **Conta WhatsApp** (numerado, como **Conta WhatsApp 2**, se já existir).
+3. No celular: WhatsApp, **Aparelhos conectados**, **Conectar um aparelho**, e escaneie o QR. A tela passa a mostrar **Conectado como** o número.
+4. Conclua o diálogo e faça o **Deploy**.
 
-A sessão fica salva na pasta de dados do Node-RED e sobrevive a reinícios. O botão **Desvincular** encerra o vínculo.
+A sessão fica salva na pasta de dados do Node-RED e sobrevive a reinícios. Para desvincular, remova o aparelho pelo celular (WhatsApp, **Aparelhos conectados**). Uma conta aberta e nunca implantada é descartada pelo servidor depois de um tempo.
 
 ## Usar o nó WhatsApp
 
@@ -46,8 +46,7 @@ Na conta (nó de configuração):
 | Campo | O que faz |
 |---|---|
 | Nome | rótulo da conta |
-| Conectar / Gerar QR | mostra o QR para vincular o celular |
-| Desvincular | remove o aparelho do WhatsApp e apaga a sessão salva |
+| QR e estado | aparecem sozinhos ao abrir a conta; o QR se renova quando expira |
 
 ### Tipo: Recebimento (só saída)
 
@@ -112,7 +111,7 @@ Queda comum: tenta de novo com espera crescente (5 s até 5 min). Se o vínculo 
 
 | Sintoma | O que fazer |
 |---|---|
-| QR não aparece | fazer o Deploy antes e clicar em **Conectar / Gerar QR** |
+| QR não aparece, ou o editor diz que o Node-RED não responde | depois de instalar ou atualizar, reiniciar o Node-RED e recarregar o editor (Ctrl+F5) |
 | Mensagem não sai | conferir se o contato escreveu nos últimos 30 dias e se há fila |
 | Grupo recusado ("não escreveu para você nos últimos 30 dias") | alguém precisa escrever no grupo com o nó online; confirmar que o id termina em `@g.us` e foi colocado no campo **Número** ou em `msg.payload` |
 | Editor mostra o nó como era antes da atualização | reiniciar o Node-RED |
@@ -124,7 +123,7 @@ Baixe o `.tgz` atual e instale do mesmo jeito (Gerenciar paleta, Instalar, envia
 ## Desinstalar
 
 1. Apague **todos os nós WhatsApp** dos fluxos.
-2. Apague a **conta WhatsApp**: menu, **Configuration nodes**, escolha a conta e exclua (se quiser, clique em **Desvincular** antes).
+2. Apague a **conta WhatsApp**: menu, **Configuration nodes**, escolha a conta e exclua (se quiser, desvincule o aparelho antes, pelo celular).
 3. Faça o **Deploy**.
 4. Menu, **Gerenciar paleta**, aba **Nós**, ache `whatsapp-neway-automacoes` e clique em **Remover**.
 
