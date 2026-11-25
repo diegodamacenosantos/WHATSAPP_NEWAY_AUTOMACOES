@@ -10,7 +10,7 @@ Requisitos: Node.js 20 ou mais novo e internet na instalação (o pacote baixa a
 
 ## O que vem no pacote
 
-Na paleta, no grupo **whatsapp neway automacoes**, aparece um nó:
+Na paleta, no grupo **WhatsApp**, aparece um nó:
 
 - **WhatsApp**: recebe e envia mensagens de texto.
 
@@ -20,7 +20,7 @@ A conta WhatsApp (login e conexão) é um nó de configuração: é criada de de
 
 1. Baixe o arquivo `.tgz` deste repositório.
 2. No Node-RED, abra o menu (três barras), **Gerenciar paleta**, aba **Instalar**, e envie o arquivo `.tgz`.
-3. Confirme. Na paleta aparece o grupo **whatsapp neway automacoes**. Se não aparecer, reinicie o Node-RED.
+3. Confirme. Na paleta aparece o grupo **WhatsApp**. Se não aparecer, reinicie o Node-RED.
 
 ## Conta (feita uma vez)
 
